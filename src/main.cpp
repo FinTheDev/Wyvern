@@ -1,6 +1,12 @@
 #include <iostream>
+#include "board.h"
 
 int main() {
-    std::cout << "Wyvern chess engine starting..." << std::endl;
+
+    Board board;
+
+    board.setupStartingPosition();
+    board.print();
+
     return 0;
 }
