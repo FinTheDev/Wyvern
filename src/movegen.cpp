@@ -111,3 +111,30 @@ void genQueen(const Board& board, int row, int col, std::vector<Move>& moveList)
     genRook(board, row, col, moveList);
     genBishop(board, row, col, moveList);
 }
+
+void genKing(const Board& board, int row, int col, std::vector<Move>& moveList) {
+
+    int rowOffsets[8] = {1, 1, 1, 0, 0, -1, -1, -1};
+    int colOffsets[8] = {1, 0, -1, 1, -1, 1, 0, -1};
+
+    Piece currentPiece = board.squares[row][col];
+    assert(currentPiece.type != PieceType::EMPTY);
+
+    for (int i = 0; i < 8; i++) {
+
+        int targetRow = row + rowOffsets[i];
+        int targetCol = col + colOffsets[i];
+
+        if (targetRow < 0 || targetRow >= 8 ||
+            targetCol < 0 || targetCol >= 8)
+            continue;
+
+        Piece targetPiece = board.squares[targetRow][targetCol];
+
+        if (targetPiece.type == PieceType::EMPTY ||
+            targetPiece.color != currentPiece.color) {
+
+            moveList.push_back(Move(row, col, targetRow, targetCol));
+        }
+    }
+}
