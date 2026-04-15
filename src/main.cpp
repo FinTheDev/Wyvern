@@ -2,6 +2,7 @@
 #include <vector>
 #include "board.h"
 #include "movegen.h"
+#include "square.h"
 
 int main() {
 
@@ -14,8 +15,7 @@ int main() {
     genKnight(board, 7, 2, moves);
 
     for (const Move& m : moves) {
-        std::cout << "(" << m.fromRow << "," << m.fromCol << ") -> "
-                  << "(" << m.toRow << "," << m.toCol << ")\n";
+        std::cout << moveToString(m.fromRow, m.fromCol, m.toRow, m.toCol) << std::endl;
     }
 
 }
