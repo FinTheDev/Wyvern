@@ -106,3 +106,8 @@ void genBishop(const Board& board, int row, int col, std::vector<Move>& moveList
         }
     }
 }
+
+void genQueen(const Board& board, int row, int col, std::vector<Move>& moveList) {
+    genRook(board, row, col, moveList);
+    genBishop(board, row, col, moveList);
+}
