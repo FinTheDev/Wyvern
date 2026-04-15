@@ -2,36 +2,35 @@
 #include <cctype>
 #include "board.h"
 
+void Board::setupSquare(int row, int col, PieceType piece, Color color) {
+    squares[row][col] = {piece, color};
+}
+
 void Board::setupStartingPosition() {
-    for (int r = 0; r < 8; r++) {
-        for (int c = 0; c < 8; c++) {
-            squares[r][c] = {PieceType::EMPTY, Color::NONE};
-        }
+    const PieceType backRank[8] = {
+        PieceType::ROOK,
+        PieceType::KNIGHT,
+        PieceType::BISHOP,
+        PieceType::QUEEN,
+        PieceType::KING,
+        PieceType::BISHOP,
+        PieceType::KNIGHT,
+        PieceType::ROOK
+    };
+
+    for (int r = 0; r < 8; r++)
+        for (int c = 0; c < 8; c++)
+            setupSquare(r, c, PieceType::EMPTY, Color::NONE);
+
+    for (int c = 0; c < 8; c++) {
+        setupSquare(0, c, backRank[c], Color::BLACK);
+        setupSquare(7, c, backRank[c], Color::WHITE);
     }
 
-    squares[0][0] = {PieceType::ROOK, Color::BLACK};
-    squares[0][1] = {PieceType::KNIGHT, Color::BLACK};
-    squares[0][2] = {PieceType::BISHOP, Color::BLACK};
-    squares[0][3] = {PieceType::QUEEN, Color::BLACK};
-    squares[0][4] = {PieceType::KING, Color::BLACK};
-    squares[0][5] = {PieceType::BISHOP, Color::BLACK};
-    squares[0][6] = {PieceType::KNIGHT, Color::BLACK};
-    squares[0][7] = {PieceType::ROOK, Color::BLACK};
-
-    for (int c = 0; c < 8; c++)
-        squares[1][c] = {PieceType::PAWN, Color::BLACK};
-
-    for (int c = 0; c < 8; c++)
-        squares[6][c] = {PieceType::PAWN, Color::WHITE};
-
-    squares[7][0] = {PieceType::ROOK, Color::WHITE};
-    squares[7][1] = {PieceType::KNIGHT, Color::WHITE};
-    squares[7][2] = {PieceType::BISHOP, Color::WHITE};
-    squares[7][3] = {PieceType::QUEEN, Color::WHITE};
-    squares[7][4] = {PieceType::KING, Color::WHITE};
-    squares[7][5] = {PieceType::BISHOP, Color::WHITE};
-    squares[7][6] = {PieceType::KNIGHT, Color::WHITE};
-    squares[7][7] = {PieceType::ROOK, Color::WHITE};
+    for (int c = 0; c < 8; c++) {
+        setupSquare(1, c, PieceType::PAWN, Color::BLACK);
+        setupSquare(6, c, PieceType::PAWN, Color::WHITE);
+    }
 }
 
 void Board::print() {
@@ -55,7 +54,7 @@ void Board::print() {
             }
 
             if (p.color == Color::BLACK)
-                symbol = static_cast<char>(tolower(symbol));
+                symbol = std::tolower(symbol);
 
             std::cout << symbol << " ";
         }

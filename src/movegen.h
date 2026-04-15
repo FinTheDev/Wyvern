@@ -1,0 +1,7 @@
+#pragma once
+
+#include "board.h"
+#include "move.h"
+#include <vector>
+
+void genKnight(const Board& board, int row, int col, std::vector<Move>& moveList);
