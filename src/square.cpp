@@ -2,7 +2,7 @@
 
 std::string coordToSquare(int row, int col) {
     char file = 'a' + col;
-    char rank = '8' - row;
+    char rank = '1' + row;
     return std::string() + file + rank;
 }
 

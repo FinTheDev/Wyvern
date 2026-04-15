@@ -11,11 +11,13 @@ int main() {
     board.print();
 
     std::vector<Move> moves;
-
-    genKnight(board, 7, 2, moves);
+    
+    genKnight(board, 0, 1, moves);
+    genRook(board, 0, 0, moves);
 
     for (const Move& m : moves) {
         std::cout << moveToString(m.fromRow, m.fromCol, m.toRow, m.toCol) << std::endl;
     }
-
+    
+    return 0;
 }

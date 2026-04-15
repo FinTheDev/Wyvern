@@ -5,3 +5,4 @@
 #include <vector>
 
 void genKnight(const Board& board, int row, int col, std::vector<Move>& moveList);
+void genRook(const Board& board, int row, int col, std::vector<Move>& moveList);
