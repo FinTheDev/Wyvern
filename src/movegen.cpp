@@ -66,3 +66,43 @@ void genRook(const Board& board, int row, int col, std::vector<Move>& moveList) 
         }
     }
 }
+
+void genBishop(const Board& board, int row, int col, std::vector<Move>& moveList) {
+    int directions[4][2] = {
+        {-1,-1},
+        {-1, 1},
+        { 1,-1},
+        { 1, 1}
+    };
+    
+    Piece currentPiece = board.squares[row][col];
+    assert(currentPiece.type != PieceType::EMPTY);
+
+    for (int i = 0; i < 4; i++) {
+
+        int directionRow = directions[i][0];
+        int directionCol = directions[i][1];
+
+        int targetRow = row + directionRow;
+        int targetCol = col + directionCol;
+
+        while (targetRow >= 0 && targetRow < 8 &&
+               targetCol >= 0 && targetCol < 8) {
+
+            Piece targetPiece = board.squares[targetRow][targetCol];
+
+            if (targetPiece.type == PieceType::EMPTY) {
+                moveList.push_back(Move(row, col, targetRow, targetCol));
+            }
+            else {
+                if (targetPiece.color != currentPiece.color) {
+                    moveList.push_back(Move(row, col, targetRow, targetCol));
+                }
+                break;
+            }
+
+            targetRow += directionRow;
+            targetCol += directionCol;
+        }
+    }
+}
