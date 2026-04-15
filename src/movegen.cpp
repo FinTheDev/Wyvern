@@ -113,7 +113,6 @@ void genQueen(const Board& board, int row, int col, std::vector<Move>& moveList)
 }
 
 void genKing(const Board& board, int row, int col, std::vector<Move>& moveList) {
-
     int rowOffsets[8] = {1, 1, 1, 0, 0, -1, -1, -1};
     int colOffsets[8] = {1, 0, -1, 1, -1, 1, 0, -1};
 
@@ -135,6 +134,46 @@ void genKing(const Board& board, int row, int col, std::vector<Move>& moveList) 
             targetPiece.color != currentPiece.color) {
 
             moveList.push_back(Move(row, col, targetRow, targetCol));
+        }
+    }
+}
+
+void genPawn(const Board& board, int row, int col, std::vector<Move>& moveList) {
+    Piece currentPiece = board.squares[row][col];
+    assert(currentPiece.type == PieceType::PAWN);
+
+    int dir = (currentPiece.color == Color::WHITE) ? 1 : -1;
+    int forwardRow = row + dir;
+
+    if (forwardRow >= 0 && forwardRow < 8) {
+        if (board.squares[forwardRow][col].type == PieceType::EMPTY) {
+            moveList.push_back(Move(row, col, forwardRow, col));
+
+            int startRank = (currentPiece.color == Color::WHITE) ? 1 : 6;
+
+            if (row == startRank) {
+                int doubleRow = row + 2 * dir;
+
+                if (board.squares[doubleRow][col].type == PieceType::EMPTY) {
+                    moveList.push_back(Move(row, col, doubleRow, col));
+                }
+            }
+        }
+
+        int captureCols[2] = {col - 1, col + 1};
+
+        for (int i = 0; i < 2; i++) {
+            int c = captureCols[i];
+
+            if (c < 0 || c >= 8)
+                continue;
+
+            Piece target = board.squares[forwardRow][c];
+
+            if (target.type != PieceType::EMPTY &&
+                target.color != currentPiece.color) {
+                moveList.push_back(Move(row, col, forwardRow, c));
+            }
         }
     }
 }
