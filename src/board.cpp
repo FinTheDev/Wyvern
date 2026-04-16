@@ -7,6 +7,8 @@ void Board::setupSquare(int row, int col, PieceType piece, Color color) {
 }
 
 void Board::setupStartingPosition() {
+    sideToMove = Color::WHITE;
+
     const PieceType backRank[8] = {
         PieceType::ROOK,
         PieceType::KNIGHT,
@@ -63,4 +65,24 @@ void Board::print() {
     }
 
     std::cout << "  a b c d e f g h\n";
+}
+
+void Board::makeMove(const Move& m) {
+
+    Piece movingPiece = squares[m.fromRow][m.fromCol];
+
+    squares[m.toRow][m.toCol] = movingPiece;
+    squares[m.fromRow][m.fromCol] = {PieceType::EMPTY, Color::NONE};
+
+    sideToMove = (sideToMove == Color::WHITE) ? Color::BLACK : Color::WHITE;
+}
+
+void Board::undoMove(const Move& m) {
+
+    Piece movingPiece = squares[m.toRow][m.toCol];
+
+    squares[m.fromRow][m.fromCol] = movingPiece;
+    squares[m.toRow][m.toCol] = m.captured;
+
+    sideToMove = (sideToMove == Color::WHITE) ? Color::BLACK : Color::WHITE;
 }
