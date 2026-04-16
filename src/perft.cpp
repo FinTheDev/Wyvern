@@ -1,6 +1,8 @@
+#include <iostream>
 #include <vector>
 #include "board.h"
 #include "movegen.h"
+#include "square.h"
 
 long long perft(Board& board, int depth) {
     if (depth == 0)
@@ -9,13 +11,23 @@ long long perft(Board& board, int depth) {
     std::vector<Move> moves;
     generateMoves(board, moves);
 
-    long long nodes = 0;
+    long long total = 0;
 
-    for (const Move& m : moves) {
+    for (Move& m : moves) {
         board.makeMove(m);
-        nodes += perft(board, depth - 1);
+
+        Color sideJustMoved =
+            (board.sideToMove == Color::WHITE) ? Color::BLACK : Color::WHITE;
+
+        if (!board.isKingInCheck(sideJustMoved)) {
+            total += perft(board, depth - 1);
+        }
+
         board.undoMove(m);
     }
 
-    return nodes;
+    if (depth == 4)
+        std::cout << "TOTAL: " << total << std::endl;
+
+    return total;
 }

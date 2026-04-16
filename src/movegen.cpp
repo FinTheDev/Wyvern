@@ -173,7 +173,6 @@ void genKing(const Board& board, int row, int col, std::vector<Move>& moveList) 
     assert(currentPiece.type != PieceType::EMPTY);
 
     for (int i = 0; i < 8; i++) {
-
         int targetRow = row + rowOffsets[i];
         int targetCol = col + colOffsets[i];
 
@@ -191,6 +190,68 @@ void genKing(const Board& board, int row, int col, std::vector<Move>& moveList) 
             );
         }
     }
+
+    if (currentPiece.color == Color::WHITE && row == 0 && col == 4 && !board.whiteKingMoved) {
+        if (!board.whiteKingsideRookMoved &&
+            board.squares[0][7].type == PieceType::ROOK &&
+            board.squares[0][7].color == Color::WHITE &&
+            board.squares[row][col+1].type == PieceType::EMPTY &&
+            board.squares[row][col+2].type == PieceType::EMPTY &&
+            !board.isSquareAttacked(0,4,Color::BLACK) &&
+            !board.isSquareAttacked(0,5,Color::BLACK) &&
+            !board.isSquareAttacked(0,6,Color::BLACK)) {
+
+            moveList.push_back(
+                Move(row, col, row, col+2, board.squares[row][col+2])
+            );
+        }
+
+        if (!board.whiteQueensideRookMoved &&
+            board.squares[0][0].type == PieceType::ROOK &&
+            board.squares[0][0].color == Color::WHITE &&
+            board.squares[row][col-1].type == PieceType::EMPTY &&
+            board.squares[row][col-2].type == PieceType::EMPTY &&
+            board.squares[row][col-3].type == PieceType::EMPTY &&
+            !board.isSquareAttacked(0,4,Color::BLACK) &&
+            !board.isSquareAttacked(0,3,Color::BLACK) &&
+            !board.isSquareAttacked(0,2,Color::BLACK)) {
+
+            moveList.push_back(
+                Move(row, col, row, col-2, board.squares[row][col-2])
+            );
+        }
+    }
+
+    if (currentPiece.color == Color::BLACK && row == 7 && col == 4 && !board.blackKingMoved) {
+        if (!board.blackKingsideRookMoved &&
+            board.squares[7][7].type == PieceType::ROOK &&
+            board.squares[7][7].color == Color::BLACK &&
+            board.squares[row][col+1].type == PieceType::EMPTY &&
+            board.squares[row][col+2].type == PieceType::EMPTY &&
+            !board.isSquareAttacked(7,4,Color::WHITE) &&
+            !board.isSquareAttacked(7,5,Color::WHITE) &&
+            !board.isSquareAttacked(7,6,Color::WHITE)) {
+
+            moveList.push_back(
+                Move(row, col, row, col+2, board.squares[row][col+2])
+            );
+        }
+
+        if (!board.blackQueensideRookMoved &&
+            board.squares[7][0].type == PieceType::ROOK &&
+            board.squares[7][0].color == Color::BLACK &&
+            board.squares[row][col-1].type == PieceType::EMPTY &&
+            board.squares[row][col-2].type == PieceType::EMPTY &&
+            board.squares[row][col-3].type == PieceType::EMPTY &&
+            !board.isSquareAttacked(7,4,Color::WHITE) &&
+            !board.isSquareAttacked(7,3,Color::WHITE) &&
+            !board.isSquareAttacked(7,2,Color::WHITE)) {
+
+            moveList.push_back(
+                Move(row, col, row, col-2, board.squares[row][col-2])
+            );
+        }
+    }
 }
 
 void genPawn(const Board& board, int row, int col, std::vector<Move>& moveList) {
@@ -201,7 +262,6 @@ void genPawn(const Board& board, int row, int col, std::vector<Move>& moveList) 
     int forwardRow = row + dir;
 
     if (forwardRow >= 0 && forwardRow < 8) {
-
         if (board.squares[forwardRow][col].type == PieceType::EMPTY) {
             moveList.push_back(
                 Move(row, col, forwardRow, col, board.squares[forwardRow][col])
@@ -212,7 +272,9 @@ void genPawn(const Board& board, int row, int col, std::vector<Move>& moveList) 
             if (row == startRank) {
                 int doubleRow = row + 2 * dir;
 
-                if (board.squares[doubleRow][col].type == PieceType::EMPTY) {
+                if (doubleRow >= 0 && doubleRow < 8 &&
+                    board.squares[doubleRow][col].type == PieceType::EMPTY) {
+
                     moveList.push_back(
                         Move(row, col, doubleRow, col, board.squares[doubleRow][col])
                     );
